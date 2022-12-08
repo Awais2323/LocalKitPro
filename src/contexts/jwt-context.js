@@ -110,17 +110,22 @@ export const AuthProvider = (props) => {
       password: password,
     });
 
-    // const { accessToken } = await authApi.login({ email, password });
-    const accessToken  = userLoginData.data.token;
-    // const user = await authApi.me({ accessToken });
-    localStorage.setItem("accessToken", accessToken);
+    if (userLoginData.data.token) {
 
-    dispatch({
-      type: ActionType.LOGIN,
-      payload: {
-        user: userLoginData.data.user,
-      },
-    });
+      // const { accessToken } = await authApi.login({ email, password });
+      const accessToken = userLoginData.data.token;
+      // const user = await authApi.me({ accessToken });
+      localStorage.setItem("accessToken", accessToken);
+
+      dispatch({
+        type: ActionType.LOGIN,
+        payload: {
+          user: userLoginData.data.user,
+        },
+      });
+      return true;
+    }
+    return false;
   };
   const logout = async () => {
     localStorage.removeItem("accessToken");
