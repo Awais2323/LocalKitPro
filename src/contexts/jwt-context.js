@@ -30,7 +30,6 @@ const handlers = {
   },
   LOGIN: (state, action) => {
     const { user } = action.payload;
-
     return {
       ...state,
       isAuthenticated: true,
@@ -72,9 +71,8 @@ export const AuthProvider = (props) => {
     const initialize = async () => {
       try {
         const accessToken = globalThis.localStorage.getItem("accessToken");
-
         if (accessToken) {
-          const user = await authApi.me({ accessToken });
+          const user = state.user;
 
           dispatch({
             type: ActionType.INITIALIZE,
@@ -112,17 +110,15 @@ export const AuthProvider = (props) => {
       password: password,
     });
 
-    console.log(userLoginData, "login data in redux");
-    console.log(userLoginData.data.token, "login data in redux");
     // const { accessToken } = await authApi.login({ email, password });
-    const { accessToken } = userLoginData.data.token;
+    const accessToken  = userLoginData.data.token;
     // const user = await authApi.me({ accessToken });
     localStorage.setItem("accessToken", accessToken);
 
     dispatch({
       type: ActionType.LOGIN,
       payload: {
-        user: userLoginData.data,
+        user: userLoginData.data.user,
       },
     });
   };
